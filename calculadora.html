@@ -44,7 +44,7 @@
 
         .botoes {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 10px;
         }
 
@@ -98,11 +98,19 @@
         .limpar {
             background: #e74c3c;
             color: white;
-            grid-column: span 2;
         }
 
         .limpar:hover {
             background: #c0392b;
+        }
+
+        .funcao {
+            background: #f39c12;
+            color: white;
+        }
+
+        .funcao:hover {
+            background: #d68910;
         }
 
         .titulo {
@@ -119,26 +127,32 @@
         <div class="display" id="display">0</div>
         <div class="botoes">
             <button class="limpar" onclick="limpar()">C</button>
+            <button class="funcao" onclick="apagarUltimo()">⌫</button>
+            <button class="funcao" onclick="mudarSinal()">+/−</button>
             <button class="operador" onclick="operador('/')">÷</button>
             <button class="operador" onclick="operador('*')">×</button>
 
+            <button class="funcao" onclick="potencia()">x²</button>
             <button class="numero" onclick="numero('7')">7</button>
             <button class="numero" onclick="numero('8')">8</button>
             <button class="numero" onclick="numero('9')">9</button>
             <button class="operador" onclick="operador('-')">−</button>
 
+            <button class="funcao" onclick="raizQuadrada()">√</button>
             <button class="numero" onclick="numero('4')">4</button>
             <button class="numero" onclick="numero('5')">5</button>
             <button class="numero" onclick="numero('6')">6</button>
             <button class="operador" onclick="operador('+')">+</button>
 
+            <button class="funcao" onclick="inverso()">1/x</button>
             <button class="numero" onclick="numero('1')">1</button>
             <button class="numero" onclick="numero('2')">2</button>
             <button class="numero" onclick="numero('3')">3</button>
-            <button class="numero" onclick="numero('.')">.</button>
+            <button class="operador" onclick="operador('%')">%</button>
 
             <button class="numero" onclick="numero('0')" style="grid-column: span 2;">0</button>
-            <button class="igual" onclick="calcular()">=</button>
+            <button class="numero" onclick="numero('.')">.</button>
+            <button class="igual" onclick="calcular()" style="grid-column: span 2;">=</button>
         </div>
     </div>
 
@@ -187,6 +201,9 @@
                 case '/':
                     resultado = num2 !== 0 ? num1 / num2 : 'Erro';
                     break;
+                case '%':
+                    resultado = num1 % num2;
+                    break;
                 default:
                     return;
             }
@@ -194,6 +211,48 @@
             operacaoAtual = resultado.toString();
             numeroAnterior = '';
             operadorAtual = '';
+            atualizarDisplay();
+        }
+
+        function potencia() {
+            if (operacaoAtual === '') return;
+            const num = parseFloat(operacaoAtual);
+            operacaoAtual = (num * num).toString();
+            atualizarDisplay();
+        }
+
+        function raizQuadrada() {
+            if (operacaoAtual === '') return;
+            const num = parseFloat(operacaoAtual);
+            if (num < 0) {
+                alert('Não é possível calcular raiz quadrada de número negativo');
+                return;
+            }
+            operacaoAtual = Math.sqrt(num).toString();
+            atualizarDisplay();
+        }
+
+        function inverso() {
+            if (operacaoAtual === '') return;
+            const num = parseFloat(operacaoAtual);
+            if (num === 0) {
+                alert('Não é possível dividir por zero');
+                return;
+            }
+            operacaoAtual = (1 / num).toString();
+            atualizarDisplay();
+        }
+
+        function mudarSinal() {
+            if (operacaoAtual === '') return;
+            const num = parseFloat(operacaoAtual);
+            operacaoAtual = (-num).toString();
+            atualizarDisplay();
+        }
+
+        function apagarUltimo() {
+            if (operacaoAtual === '') return;
+            operacaoAtual = operacaoAtual.slice(0, -1);
             atualizarDisplay();
         }
 
