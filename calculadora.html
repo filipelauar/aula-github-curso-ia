@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .calculadora {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            width: 320px;
+        }
+
+        .display {
+            background: #2d3436;
+            color: #00ff00;
+            font-size: 2.5rem;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: right;
+            margin-bottom: 20px;
+            word-wrap: break-word;
+            word-break: break-all;
+            min-height: 60px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .botoes {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        button {
+            padding: 20px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .numero {
+            background: #ecf0f1;
+            color: #2d3436;
+        }
+
+        .numero:hover {
+            background: #bdc3c7;
+        }
+
+        .operador {
+            background: #667eea;
+            color: white;
+        }
+
+        .operador:hover {
+            background: #5568d3;
+        }
+
+        .igual {
+            background: #27ae60;
+            color: white;
+            grid-column: span 2;
+        }
+
+        .igual:hover {
+            background: #229954;
+        }
+
+        .limpar {
+            background: #e74c3c;
+            color: white;
+            grid-column: span 2;
+        }
+
+        .limpar:hover {
+            background: #c0392b;
+        }
+
+        .titulo {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #2d3436;
+            font-size: 1.8rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculadora">
+        <h1 class="titulo">Calculadora</h1>
+        <div class="display" id="display">0</div>
+        <div class="botoes">
+            <button class="limpar" onclick="limpar()">C</button>
+            <button class="operador" onclick="operador('/')">÷</button>
+            <button class="operador" onclick="operador('*')">×</button>
+
+            <button class="numero" onclick="numero('7')">7</button>
+            <button class="numero" onclick="numero('8')">8</button>
+            <button class="numero" onclick="numero('9')">9</button>
+            <button class="operador" onclick="operador('-')">−</button>
+
+            <button class="numero" onclick="numero('4')">4</button>
+            <button class="numero" onclick="numero('5')">5</button>
+            <button class="numero" onclick="numero('6')">6</button>
+            <button class="operador" onclick="operador('+')">+</button>
+
+            <button class="numero" onclick="numero('1')">1</button>
+            <button class="numero" onclick="numero('2')">2</button>
+            <button class="numero" onclick="numero('3')">3</button>
+            <button class="numero" onclick="numero('.')">.</button>
+
+            <button class="numero" onclick="numero('0')" style="grid-column: span 2;">0</button>
+            <button class="igual" onclick="calcular()">=</button>
+        </div>
+    </div>
+
+    <script>
+        let display = document.getElementById('display');
+        let operacaoAtual = '';
+        let numeroAnterior = '';
+        let operadorAtual = '';
+
+        function numero(n) {
+            if (n === '.' && operacaoAtual.includes('.')) return;
+            operacaoAtual += n;
+            atualizarDisplay();
+        }
+
+        function operador(op) {
+            if (operacaoAtual === '') return;
+
+            if (numeroAnterior !== '') {
+                calcular();
+            } else {
+                numeroAnterior = operacaoAtual;
+            }
+
+            operadorAtual = op;
+            operacaoAtual = '';
+        }
+
+        function calcular() {
+            if (operadorAtual === '' || operacaoAtual === '') return;
+
+            let resultado;
+            const num1 = parseFloat(numeroAnterior);
+            const num2 = parseFloat(operacaoAtual);
+
+            switch (operadorAtual) {
+                case '+':
+                    resultado = num1 + num2;
+                    break;
+                case '-':
+                    resultado = num1 - num2;
+                    break;
+                case '*':
+                    resultado = num1 * num2;
+                    break;
+                case '/':
+                    resultado = num2 !== 0 ? num1 / num2 : 'Erro';
+                    break;
+                default:
+                    return;
+            }
+
+            operacaoAtual = resultado.toString();
+            numeroAnterior = '';
+            operadorAtual = '';
+            atualizarDisplay();
+        }
+
+        function limpar() {
+            operacaoAtual = '';
+            numeroAnterior = '';
+            operadorAtual = '';
+            atualizarDisplay();
+        }
+
+        function atualizarDisplay() {
+            display.textContent = operacaoAtual || '0';
+        }
+    </script>
+</body>
+</html>
