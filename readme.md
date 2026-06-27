@@ -1,1 +1,1 @@
-Aula de github do curso.
+Aula de github do curso. Vamos fazer uma calculadora
